@@ -1,0 +1,207 @@
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <!-- jquery-validator -->
+    <script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+    <script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+    <!-- layer -->
+    <script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+    <!-- md5.js -->
+    <script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
+    <!-- common.js -->
+    <script type="text/javascript" th:src="@{/js/common.js}"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "Open Sans", sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 11px;
+        }
+
+        body {
+            background: #cbc0d3;
+        }
+
+        .main-header {
+            width: 100%;
+            height: 100px;
+            background: #eac7cc;
+            display: block;
+        }
+
+        .navbar {
+            display: inline-block;
+            float: right;
+            margin-right: 50px;
+            margin-top: 30px;
+        }
+
+        .logo {
+            display: inline-block;
+            margin-top: 30px;
+            margin-left: 30px;
+            text-decoration: none;
+        }
+
+        .logo-lg {
+            font-size: 20px;
+            font-weight: lighter;
+            color: #232324;
+        }
+
+        .logo-lg > b {
+            font-size: 20px;
+            font-weight: lighter;
+            color: #232324;
+        }
+
+        .container {
+            background: #FFFFFF;
+        }
+
+        .add-good {
+            padding-top: 12px;
+            padding-bottom: 20px;
+            border-radius: 10px;
+            outline: none;
+            display: block;
+            margin-right: 30px;
+            background: #f6f6f6;
+            color: #ce7d88;
+            border: solid 1px #eac7cc;
+        }
+    </style>
+</head>
+<body>
+
+
+<!--抽取头部公共页面-->
+<header id="site-header" class="main-header">
+    <!-- Logo -->
+    <a class="logo" th:href="@{/goods/toList}">
+        <span class="logo-lg"><b>商品抢购</b>系统</span></a>
+
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img class="user-image" alt="User Image">
+                        <span class="hidden-xs"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <!-- User image -->
+                        <li class="user-header">
+                            <img class="img-circle" alt="User Image">
+                            <p>
+                                Team B06 - Web Developer
+                                <small>2021.4.20</small>
+                            </p>
+                        </li>
+                        <!-- Menu Body -->
+                        <li class="user-body">
+                        </li>
+                        <li class="user-footer">
+                            <div class="pull-middle">
+                                <a th:href="@{/login/out}" class="btn btn-lg btn-default btn-block">退出系统</a>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="panel-heading">秒杀商品列表</div>
+    <div>
+        <button id="add-good" class="add-good" onclick="addGood()">添加商品</button>
+    </div>
+
+    <table class="table" id="goodslist">
+        <tr>
+            <td>商品名称</td>
+            <td>商品图片</td>
+            <td>商品原价</td>
+            <td>秒杀价</td>
+            <td>库存数量</td>
+            <td>详情</td>
+            <td id="delete">删除</td>
+        </tr>
+        <tr th:each="goods,goodstStat : ${goodList}">
+            <td th:text="${goods.goodName}"></td>
+            <td><img th:src="@{${goods.goodImg}}" width="100" height="100"/>
+            </td>
+            <td th:text="${goods.goodPrice}"></td>
+            <td th:text="${goods.secKillPrice}"></td>
+            <td th:text="${goods.stockCount}"></td>
+            <td><a th:href="'/goodsDetail.htm?goodId='+${goods.id}">详情</a></td>
+            <td><a id="delete1" th:onclick="'javascript:doDelete(\''+${goods.id}+'\')'">删除</a></td>
+            <!-- <td><a th:href="'/delete.htm?goodId='+${goods.id}">删除</a></td>-->
+        </tr>
+        <input type="hidden" id="userid" th:value="${user.id}">
+    </table>
+</div>
+<script>
+
+    $(function () {
+        getUserId();
+    });
+
+    function getUserId() {
+        var userId = document.getElementById("userid").value;
+        layer.msg("欢迎用户" + userId + "登录", {time: 3000});
+
+        if (userId != "17621806946") {
+
+            document.getElementById("add-good").style.visibility = "hidden";
+            document.getElementById("delete").style.visibility = "hidden";
+            document.getElementById("delete1").style.visibility = "hidden";
+        }
+    }
+
+    function doDelete(goodId) {
+        var userId = document.getElementById("userid").value;
+        console.log(userId);
+        $.ajax({
+            url: "/goods/delete/" + goodId,
+            type: "POST",
+            data: {
+                userId: userId,
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    layer.msg("成功");
+                    window.location.href = "/goods/toList";
+                } else {
+                    layer.msg(data.message);
+                }
+            },
+            error: function () {
+                layer.closeAll();
+            }
+        });
+    }
+
+    function addGood() {
+        window.location.href = "/goods/toAdd";
+    }
+
+</script>
