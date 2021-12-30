@@ -24,9 +24,9 @@ spring:
   # 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://159.75.94.130:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://127.0.0.1:3306/seckill?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: root
-    password: wwh@864988761@1
+    password: root
     hikari:
       #连接池名
       pool-name: DateHikariCP
@@ -48,11 +48,9 @@ spring:
   #redis配置
   redis:
     #服务器地址
-    host: 159.75.94.130
+    host: 127.0.0.1
     #端口
     port: 6379
-    #密码
-    password: study
     #数据库
     database: 0
     #超时时间
