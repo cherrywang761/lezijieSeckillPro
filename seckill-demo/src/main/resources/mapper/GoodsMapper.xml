@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.seckill.mapper.GoodsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.xxxx.seckill.pojo.Goods">
+        <result column="id" property="id"/>
+        <result column="good_name" property="goodName"/>
+        <result column="good_title" property="goodTitle"/>
+        <result column="good_img" property="goodImg"/>
+        <result column="good_detail" property="goodDetail"/>
+        <result column="good_price" property="goodPrice"/>
+        <result column="good_stock" property="goodStock"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id,
+        good_name, good_title, good_img, good_detail, good_price, good_stock
+    </sql>
+    <insert id="addGood">
+        insert
+
+    </insert>
+
+
+    <!-- 获取全部商品 -->
+    <select id="findGoodsVo" resultType="com.seckillpro.seckill_pro.vo.GoodsVo">
+        select g.id,
+        g.good_name,
+        g.good_img,
+        g.good_detail,
+        g.good_price,
+        g.good_stock,
+        sg.seckill_price,
+        sg.stock_count,
+        sg.start_date,
+        sg.end_date
+        FROM
+        t_goods g
+        LEFT JOIN t_seckill_goods AS sg ON g.id = sg.good_id
+    </select>
+    <!--    获取商品-->
+    <select id="findGoodsVoByGoodId" resultType="com.seckillpro.seckill_pro.vo.GoodsVo">
+        select g.id,
+        g.good_name,
+        g.good_img,
+        g.good_detail,
+        g.good_price,
+        g.good_stock,
+        sg.seckill_price,
+        sg.stock_count,
+        sg.start_date,
+        sg.end_date
+        FROM
+        t_goods g
+        LEFT JOIN t_seckill_goods AS sg ON g.id = sg.good_id
+        where g.id = #{goodId}
+    </select>
+
+</mapper>

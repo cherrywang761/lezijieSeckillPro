@@ -31,24 +31,12 @@ public class GoodsController {
     /**
      * 跳转到商品列表页
      *
-     * @param session
      * @param model
-     * @param ticket
+     * @param user
      * @return
      */
     @RequestMapping(value = "/toList")
-    public String toList(HttpServletRequest request,
-                         HttpServletResponse response,
-                         Model model,
-                         @CookieValue("userTicket") String ticket) {
-        if (StringUtils.isEmpty(ticket)) {
-            //如果cookie为空，就跳转回登录
-            return "login";
-        }
-        User user = iUserService.getUserByCookie(ticket, request, response);
-        if (null == user) {
-            return "login";
-        }
+    public String toList(Model model, User user) {
         model.addAttribute("user", user);
         return "goodsList";
     }
