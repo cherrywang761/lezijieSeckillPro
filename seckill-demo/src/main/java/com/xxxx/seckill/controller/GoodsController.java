@@ -1,7 +1,9 @@
 package com.xxxx.seckill.controller;
 
 import com.xxxx.seckill.pojo.User;
+import com.xxxx.seckill.service.IGoodsService;
 import com.xxxx.seckill.service.IUserService;
+import com.xxxx.seckill.vo.GoodsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * @ClassName GoodsController
@@ -28,6 +31,9 @@ public class GoodsController {
     @Autowired
     IUserService iUserService;
 
+    @Autowired
+    private IGoodsService goodsService;
+
     /**
      * 跳转到商品列表页
      *
@@ -38,7 +44,10 @@ public class GoodsController {
     @RequestMapping(value = "/toList")
     public String toList(Model model, User user) {
         model.addAttribute("user", user);
+        List<GoodsVo> goodsVo = goodsService.findGoodsVo();
+        model.addAttribute("goodsList", goodsVo);
         return "goodsList";
     }
+
 
 }

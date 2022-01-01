@@ -37,32 +37,32 @@ public class Goods implements Serializable {
      * 商品名称
      */
 
-    private String goodName;
+    private String goodsName;
 
     /**
      * 商品标题
      */
-    private String goodTitle;
+    private String goodsTitle;
 
     /**
      * 商品图片路径
      */
-    private String goodImg;
+    private String goodsImg;
 
     /**
      * 商品详情
      */
-    private String goodDetail;
+    private String goodsDetail;
 
     /**
      * 商品价格
      */
-    private BigDecimal goodPrice;
+    private BigDecimal goodsPrice;
 
     /**
      * 商品库存，-1 表示没有限制
      */
-    private Integer goodStock;
+    private Integer goodsStock;
 
 
 }
