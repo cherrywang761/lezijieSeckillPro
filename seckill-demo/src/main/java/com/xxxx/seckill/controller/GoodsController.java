@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,5 +50,17 @@ public class GoodsController {
         return "goodsList";
     }
 
+
+    /**
+     * 跳转用户详情页面
+     * @param GoodsId
+     * @return
+     */
+    @RequestMapping(value = "/toDetail/{goodsId}")
+    public String toDetail(Model model, User user, @PathVariable Long goodsId){
+        model.addAttribute("user", user);
+        model.addAttribute("goods", goodsService.findGoodsVoByGoodsId(goodsId));
+        return "goodsDetail";
+    }
 
 }

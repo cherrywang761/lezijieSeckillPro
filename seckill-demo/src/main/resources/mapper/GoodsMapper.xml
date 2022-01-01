@@ -32,8 +32,29 @@
             sg.`stock_count`,
             sg.`start_date`,
             sg.`end_date`
-        FROM t_goods g
-        LEFT JOIN t_seckill_goods AS sg ON g.id = sg.`goods_id`;
+        FROM
+            t_goods g
+            LEFT JOIN t_seckill_goods AS sg ON g.id = sg.`goods_id`
     </select>
+    <select id="findGoodsVoByGoodsId" resultType="com.xxxx.seckill.vo.GoodsVo">
+        SELECT
+            g.`id`,
+            g.`goods_detail`,
+            g.`goods_img`,
+            g.`goods_name`,
+            g.`goods_price`,
+            g.`goods_stock`,
+            g.`goods_title`,
+            sg.`seckill_price`,
+            sg.`stock_count`,
+            sg.`start_date`,
+            sg.`end_date`
+        FROM
+            t_goods g
+            LEFT JOIN t_seckill_goods AS sg ON g.id = sg.`goods_id`
+        WHERE
+            g.`id` = #{goodsId}
+    </select>
+
 
 </mapper>
