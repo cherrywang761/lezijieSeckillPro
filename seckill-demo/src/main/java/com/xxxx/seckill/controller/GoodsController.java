@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,7 +60,29 @@ public class GoodsController {
     @RequestMapping(value = "/toDetail/{goodsId}")
     public String toDetail(Model model, User user, @PathVariable Long goodsId){
         model.addAttribute("user", user);
-        model.addAttribute("goods", goodsService.findGoodsVoByGoodsId(goodsId));
+        GoodsVo goodsVo = goodsService.findGoodsVoByGoodsId(goodsId);
+        Date startDate = goodsVo.getStartDate();
+        Date endDate = goodsVo.getEndDate();
+        Date nowDate = new Date();
+        //秒杀状态
+        int secKillStatus = 0;
+        //秒杀倒计时
+        int remainSecond = 0;
+        //秒杀还未开始
+        if(nowDate.before(startDate)){
+            remainSecond = (int)((startDate.getTime()-nowDate.getTime())/1000);
+        }else if(nowDate.after(endDate)){
+            //秒杀已结束
+            secKillStatus = 2;
+            remainSecond = -1;
+        }else{
+            //秒杀中
+            secKillStatus = 1;
+            remainSecond = 0;
+        }
+        model.addAttribute("remainSeconds", remainSecond);
+        model.addAttribute("secKillStatus", secKillStatus);
+        model.addAttribute("goods", goodsVo);
         return "goodsDetail";
     }
 
